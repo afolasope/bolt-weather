@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Details, Error, Home } from './pages';
+import { Header, Form, Geolocation } from './components';
+import { useCitiesContext } from './context/cities_context';
 
 function App() {
+  const { isLoading } = useCitiesContext();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <main className="wrapper">
+        <header>
+          <Header />
+          <div className="header-bottom">
+            <Form />
+            <Geolocation />
+          </div>
+        </header>
+        {isLoading && (
+          <svg
+            className="loading"
+            viewBox="0 0 100 100"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="40" cy="40" r="35" />
+          </svg>
+        )}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/details/:cityId" element={<Details />} />
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </main>
+    </Router>
   );
 }
 
